@@ -1,0 +1,57 @@
+Ví dụ dữ liệu cho tính toán thông số lớp composite
+==================================================
+
+CARBON FIBER / EPOXY RESIN:
+E1f = 230 (GPa) - Độ cứng dọc trục sợi carbon
+E2f = 15 (GPa) - Độ cứng ngang trục sợi carbon
+G12f = 7 (GPa) - Mô đun cắt sợi carbon
+Em = 3.5 (GPa) - Mô đun nhựa epoxy
+G12m = 1.2 (GPa) - Mô đun cắt nhựa epoxy
+vf = 0.6 - Phần trăm thể tích sợi (60%)
+sLf_tens = 3500 (MPa) - Bền kéo dọc sợi
+sLm_tens = 50 (MPa) - Bền kéo nhựa
+phi = 0.3 - Tham số góc
+sLm_compr = 150 (MPa) - Bền nén nhựa
+sLTm = 60 (MPa) - Bền cắt nhựa
+rho_f = 1600 (kg/m³) - Khối lượng riêng sợi carbon
+rho_m = 1200 (kg/m³) - Khối lượng riêng nhựa epoxy
+nju12_f = 0.25 - Hệ số Poisson sợi
+nju12_m = 0.35 - Hệ số Poisson nhựa
+
+Kết quả dự kiến:
+E1c = 139.4 GPa
+E2c = 7.464 GPa
+G12c = 2.866 GPa
+nju12_c = 0.29
+sLc_tens = 1991.43 MPa
+sLc_compr = 2.956 MPa
+sTc_tens = 35.18 MPa
+sTc_compr = 105.53 MPa
+sLTc = 39.51 MPa
+rho_c = 1440 kg/m³
+
+---
+
+GLASS FIBER / POLYESTER:
+E1f = 85 (GPa)
+E2f = 8 (GPa)
+G12f = 3.5 (GPa)
+Em = 3.2 (GPa)
+G12m = 1.0 (GPa)
+vf = 0.5 - 50% sợi
+sLf_tens = 1700 (MPa)
+sLm_tens = 40 (MPa)
+phi = 0.25
+sLm_compr = 120 (MPa)
+sLTm = 50 (MPa)
+rho_f = 2550 (kg/m³)
+rho_m = 1200 (kg/m³)
+nju12_f = 0.22
+nju12_m = 0.32
+
+---
+
+Ghi chú:
+- Tất cả giá trị phải là số dương
+- vf phải nằm trong khoảng 0-1
+- Hệ số Poisson thường từ 0.2-0.4

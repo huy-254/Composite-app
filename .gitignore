@@ -1,0 +1,14 @@
+# Python / Fortran build artifacts
+__pycache__/
+*.pyc
+*.mod
+*.o
+ply_calc_debug.exe
+
+# Local tool settings
+.claude/
+
+# Files belonging to other projects in this folder
+*.m
+*.dat
+aerodynamic_data_2G_FW.txt
