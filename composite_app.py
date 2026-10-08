@@ -184,10 +184,10 @@ class MaterialLibraryDialog(ThicknessMixin):
         self.on_create = on_create
         self.material = None
         self.root = tk.Toplevel(parent)
+        self.root.withdraw()  # stay hidden while measuring, see _fix_window_size
         self.root.title("Thư viện vật liệu")
         self.root.resizable(False, False)
         self.root.transient(parent)
-        self.root.grab_set()
 
         main = ttk.Frame(self.root, padding=10)
         main.pack(fill=tk.BOTH, expand=True)
@@ -213,8 +213,8 @@ class MaterialLibraryDialog(ThicknessMixin):
         right.grid(row=0, column=1, sticky=tk.NSEW, padx=(10, 0))
         self.title_var = tk.StringVar(value="Chọn một vật liệu ở danh sách bên trái")
         self.desc_var = tk.StringVar()
-        ttk.Label(right, textvariable=self.title_var, font=("TkDefaultFont", 10, "bold")).grid(
-            row=0, column=0, columnspan=2, sticky=tk.W, pady=(0, 2))
+        ttk.Label(right, textvariable=self.title_var, font=("TkDefaultFont", 10, "bold"),
+                  wraplength=330).grid(row=0, column=0, columnspan=2, sticky=tk.W, pady=(0, 2))
         ttk.Label(right, textvariable=self.desc_var, wraplength=330, foreground="gray25").grid(
             row=1, column=0, columnspan=2, sticky=tk.W, pady=(0, 8))
         self.prop_vars = {}
@@ -233,15 +233,35 @@ class MaterialLibraryDialog(ThicknessMixin):
         self.create_button = ttk.Button(buttons, text="Create ply", command=self.create_ply)
         self.create_button.pack(side=tk.RIGHT, padx=4)
         self._build_warning(main)
+        self._fix_window_size()
+        self.root.deiconify()
+        self.root.grab_set()  # needs a visible window
 
-    def _on_select(self):
-        sel = self.tree.selection()
-        self.material = self.materials.get(sel[0]) if sel else None
-        mat = self.material or {}
+    def _fix_window_size(self):
+        """Size the window for the largest material entry, so it does not jump when selecting.
+
+        Runs while the window is withdrawn, so the trial layouts are never drawn on screen.
+        """
+        width = height = 0
+        for mat in [None, *self.materials.values()]:
+            self._show_material(mat)
+            self.root.update_idletasks()
+            width = max(width, self.root.winfo_reqwidth())
+            height = max(height, self.root.winfo_reqheight())
+        self._show_material(None)
+        self.root.geometry(f"{width}x{height}")
+
+    def _show_material(self, mat):
+        mat = mat or {}
         self.title_var.set(mat.get("name", "Chọn một vật liệu ở danh sách bên trái"))
         self.desc_var.set(mat.get("description", ""))
         for name, var in self.prop_vars.items():
             var.set(f"{mat[name]:.6g}" if mat else "---")
+
+    def _on_select(self):
+        sel = self.tree.selection()
+        self.material = self.materials.get(sel[0]) if sel else None
+        self._show_material(self.material)
         self._update_create_state()
 
     def _update_create_state(self):
